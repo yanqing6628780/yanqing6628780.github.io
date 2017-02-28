@@ -3,7 +3,6 @@ title: karma配置参数笔记(2)
 date: 2017-02-21 16:39:11
 categories:
 - 测试
-- karma
 tags:
 - karma
 - 测试框架

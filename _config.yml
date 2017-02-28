@@ -4,10 +4,10 @@
 
 # Site
 title: 山姆的博客 
-subtitle: sam leung XGL
-description: 谛听科技 phper 前端攻城狮
+subtitle: sam leung
+description: 谛听科技 phper 前端
 author: sam leung
-language: default
+language: zh-CN
 timezone: UTC
 
 # URL
@@ -63,29 +63,37 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: yilia
+theme: maupassant
 disqus_shortname: sam5372
+#RSS订阅
+plugin:
+- hexo-generator-feed
+#Feed Atom
+feed:
+type: atom
+path: atom.xml
+limit: 20
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
   repo: git@github.com:yanqing6628780/yanqing6628780.github.io.git
-
-jsonContent:
-  meta: false
-  pages: false
-  posts:
-    title: true
-    date: true
-    path: true
-    text: true
-    raw: false
-    content: false
-    slug: false
-    updated: false
-    comments: false
-    link: false
-    permalink: false
-    excerpt: false
-    categories: false
-    tags: true
+  
+# jsonContent:
+#   meta: false
+#   pages: false
+#   posts:
+#     title: true
+#     date: true
+#     path: true
+#     text: true
+#     raw: false
+#     content: false
+#     slug: false
+#     updated: false
+#     comments: false
+#     link: false
+#     permalink: false
+#     excerpt: false
+#     categories: false
+#     tags: true
