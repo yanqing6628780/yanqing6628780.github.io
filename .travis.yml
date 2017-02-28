@@ -1,0 +1,30 @@
+language: node_js
+
+node_js: stable
+
+cache:
+  directories:
+    - node_modules
+
+before_install:
+  - echo '' > .npmrc
+
+install:
+  - npm install -g hexo
+  - npm install
+
+script:
+  - hexo generate
+
+after_success:
+  - cd public
+  - git init
+  - git config user.name "sam leung" 
+  - git config user.email "sam5372@aliyun.com"
+  - git add --all .
+  - git commit -m "Travis CI Auto Builder"
+  - git push --force --quiet "https://${DEPLOY_TOKEN}@${GH_REF}" HEAD:master
+
+env:
+  global:
+    - GH_REF: github.com/yanqing6628780/yanqing6628780.github.io.git
