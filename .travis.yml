@@ -18,6 +18,7 @@ script:
 
 after_success:
   - cd public
+  - git init
   - git config user.name "sam leung" 
   - git config user.email "sam5372@aliyun.com"
   - git add --all .
