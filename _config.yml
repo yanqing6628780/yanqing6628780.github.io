@@ -63,7 +63,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: maupassant
+theme: maupassant_sam
 disqus_shortname: sam5372
 #RSS订阅
 plugin:
