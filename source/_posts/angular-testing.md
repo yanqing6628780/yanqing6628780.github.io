@@ -1,14 +1,11 @@
 ---
 title: angular-testing
 date: 2018-05-15 12:03:55
-categories:
-- 测试
-- angular
-- 前端
-- js
 tags:
-- testing
-- angular testing
+  - testing
+  - angular testing
+categories:
+  - angular
 ---
 
 这是一篇流水账式记录angular测试时遇到的问题和想法。

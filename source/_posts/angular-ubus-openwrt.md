@@ -2,9 +2,7 @@
 title: 应用在openwrt固件上的angular项目
 date: 2018-01-11 14:00:00
 categories:
-- 前端
-- js
-- angular
+    - angular
 tags:
 - angular
 - openwrt

@@ -5,8 +5,6 @@ tags:
   - formControl
   - component
 categories:
-  - 前端
-  - js
   - angular
 date: 2018-05-15 12:02:59
 ---
