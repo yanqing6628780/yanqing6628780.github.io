@@ -21,9 +21,11 @@ script:
 
 deploy:
   - provider: pages
+  - repo: yanqing6628780/yanqing6628780.github.io
   - skip-cleanup: true
   - github-token: $DEPLOY_TOKEN  # Set in the settings page of your - repository, as a secure variable
   - keep-history: false
+  - target-branch: master
   - local-dir: public
   - on:
       branch: hexo
