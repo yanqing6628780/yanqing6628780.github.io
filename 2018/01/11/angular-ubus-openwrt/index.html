@@ -1,0 +1,50 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description" content="谛听科技 phper 前端"><title>应用在openwrt固件上的angular项目 | 山姆的博客</title><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/5.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.1.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><link rel="alternate" type="application/atom+xml" href="/atom.xml"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">应用在openwrt固件上的angular项目</h1><a id="logo" href="/.">山姆的博客</a><p class="description">sam leung</p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a><a href="/atom.xml"><i class="fa fa-rss"> 订阅</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">应用在openwrt固件上的angular项目</h1><div class="post-meta">Jan 11, 2018<span> | </span><span class="category"><a href="/categories/angular/">angular</a></span><script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><a data-disqus-identifier="2018/01/11/angular-ubus-openwrt/" href="/2018/01/11/angular-ubus-openwrt/#disqus_thread" class="disqus-comment-count"></a><div class="post-content"><p>项目地址：<a href="https://github.com/yanqing6628780/angular2_ubus_openwrt" target="_blank" rel="noopener">https://github.com/yanqing6628780/angular2_ubus_openwrt</a></p>
+<p>该项目是在公司的<code>pandorabox</code>固件的<code>ubus</code>接口下，使用<code>angular</code>进行开发尝试。<br>所以，要运行该项目：</p>
+<ul>
+<li>你需要一个路由器</li>
+<li>该路由器需要刷入<code>pandorabox</code>或者<code>openwrt</code>固件</li>
+<li>固件内需要有以下<code>ubus</code>命令：<ul>
+<li>session</li>
+<li>uci</li>
+</ul>
+</li>
+</ul>
+<p>如果你路由器不是<code>192.168.1.1</code>的ip，你还需要修改<code>proxy.conf.json</code>文件。</p>
+<p>该项目是从angular的hero项目clone下来后直接修改的。只app内的文件，其他配置基本没有修改。<br>用到的知识点如下：</p>
+<ul>
+<li>路由拆分</li>
+<li>http拦截器</li>
+<li>路由守卫(鉴权)</li>
+<li>延迟加载(这个没看出效果)</li>
+<li>使用<a href="https://ng.ant.design" target="_blank" rel="noopener">ng-zorro-antd</a></li>
+<li>组件二次封装(难点1)</li>
+</ul>
+<p>其实，按照hero项目的教程看下来，你基本能掌握大部分技能。但是，要真正学习到知识还是要用实际项目练手。就好像难点1那里，这里的封装需了解</p>
+<ul>
+<li>如何对数据进行双向绑定</li>
+<li>如何从组件输入后输出<br>现在<code>angular</code>不像<code>angular1</code>的<code>Directive</code>可以直接使用<code>scope</code>进行双向绑定<br>你还要使用各种装饰器<code>@Input</code> <code>@Output</code>还要使用<code>EventEmitter</code>进行事件触发。<br>详细请看<code>password_eye</code>目录下.ts文件</li>
+</ul>
+<p>据说，这样做的目的是为了减少像<code>angular1</code>那样的全局<code>脏检查</code>，性能会更好。但是，开发就麻烦和复杂了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>angular开发还是要配合<code>vscode</code>进行开发，不然<code>import</code>库的时候真的好麻烦<br>还有现在引入的组件概念。其实，你把这个组件当成<code>angular1</code>的控制器，就比较容易理解。<br>但是，<code>angular1</code>的<code>Directive</code>现在也是归到<code>@Component</code>的。你在<code>angular</code>里面使用<code>@Directive</code>是没法引入<code>template</code>和<code>templateUrl</code>这些参数的。所以，<code>angular</code>的<code>@Directive</code>又是另外一个概念了<br>而且，<code>angular</code>现在也解决了<code>angular1</code>时的少问题。例如：双view。而且，<code>route</code>比以前强大，有守卫、延迟加载、还有延迟预加载。<br>不过，<code>angular</code>有个比较麻烦的‘缺点’。例如：父组件的模板上有个<code>tilte</code>变量，这个变量是用在head标签内的title标签。如果，想要子组件内赋值，你只能使用<code>service</code>这种形式，然后这个变量要用Rxjx的<code>Observable</code>。子组件要注入这个<code>service</code>，父组件对其进行<code>订阅</code>。<br>暂时，使用<code>angular</code>的感受就是这样了。如果项目能继续深入应该会有发现更多‘问题’，解决更多问题，这样对<code>angular</code>有更多和更深入的了解。</p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="http://yanqing6628780.github.io/2018/01/11/angular-ubus-openwrt/" data-id="cjh7i97ny0006y6l27blf5wnq" class="article-share-link">分享到</a><div class="tags"><a href="/tags/angular/">angular</a><a href="/tags/openwrt/">openwrt</a><a href="/tags/ubus/">ubus</a></div><div class="post-nav"><a href="/2018/05/15/angular-component-formcontrol/" class="pre">开发angular上的formControl组件</a><a href="/2018/01/11/docker-mount/" class="next">docker 挂载目录造成程序无法找到文件</a></div><div id="disqus_thread"><script>var disqus_shortname = 'sam5372';
+var disqus_identifier = '2018/01/11/angular-ubus-openwrt/';
+var disqus_title = '应用在openwrt固件上的angular项目';
+var disqus_url = 'http://yanqing6628780.github.io/2018/01/11/angular-ubus-openwrt/';
+(function() {
+  var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+  dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//sam5372.disqus.com/count.js" async></script></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><div class="search-form"><input id="local-search-input" placeholder="Search" type="text" name="q" results="0"/><div id="local-search-result"></div></div></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/angular/">angular</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/测试/">测试</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/运维/">运维</a><span class="category-list-count">1</span></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/openwrt/" style="font-size: 15px;">openwrt</a> <a href="/tags/angular/" style="font-size: 15px;">angular</a> <a href="/tags/component/" style="font-size: 15px;">component</a> <a href="/tags/testing/" style="font-size: 15px;">testing</a> <a href="/tags/angular-testing/" style="font-size: 15px;">angular testing</a> <a href="/tags/formControl/" style="font-size: 15px;">formControl</a> <a href="/tags/ubus/" style="font-size: 15px;">ubus</a> <a href="/tags/docker/" style="font-size: 15px;">docker</a> <a href="/tags/docker-compose/" style="font-size: 15px;">docker-compose</a> <a href="/tags/karma/" style="font-size: 15px;">karma</a> <a href="/tags/测试框架/" style="font-size: 15px;">测试框架</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最新文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/05/15/angular-testing/">angular-testing</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/05/15/angular-component-formcontrol/">开发angular上的formControl组件</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/11/angular-ubus-openwrt/">应用在openwrt固件上的angular项目</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/01/11/docker-mount/">docker 挂载目录造成程序无法找到文件</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/21/karma-config-note-2/">karma配置参数笔记(2)</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/16/karma-config-note/">karma配置参数笔记</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-comment-o"> 最近评论</i></div><script type="text/javascript" src="//sam5372.disqus.com/recent_comments_widget.js?num_items=5&amp;hide_avatars=1&amp;avatar_size=32&amp;excerpt_length=20&amp;hide_mods=1"></script></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> 友情链接</i></div><ul></ul><a href="http://arylo.github.io/" title="渣渣" target="_blank">渣渣</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">山姆的博客.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.pack.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="/css/jquery.fancybox.css?v=0.0.0"><script type="text/javascript" src="/js/search.js?v=0.0.0"></script><script>var search_path = 'search.xml';
+if (search_path.length == 0) {
+   search_path = 'search.xml';
+}
+var path = '/' + search_path;
+searchFunc(path, 'local-search-input', 'local-search-result');
+</script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?11eb010dfde7ceaf65dd3d49029288df";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(hm, s);
+  })();
+</script><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>

@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  
+  
+    
+    <entry>
+      <title><![CDATA[angular-testing]]></title>
+      <url>http://yanqing6628780.github.io/2018/05/15/angular-testing/</url>
+      <content type="html"><![CDATA[<p>这是一篇流水账式记录angular测试时遇到的问题和想法。</p>
+<p>在这个项目内的<code>api.service</code>，我注入了<code>HttpClient</code>、<code>NzNotificationService</code>、<code>router</code>三个服务。<br>在测试<code>api.service</code>时，你测试的是<code>router</code>服务的<code>navigate</code>方法有没有被调用，而且输入什么参数。这时，你要使用<code>jasmine</code>的<code>spy</code>监视对<code>router</code>下的<code>navigate</code>方法。而不是，检查浏览器地址栏是否有发生变化。<br>难道我们就不要检查浏览器地址栏的变化吗？其实，还是要的。不过，这应该是交给<code>router</code>服务本身的测试来做。这才是模块化的思想，各模块能独立加载，有自身的单元测试。  </p>
+<p>然后，是对登录页组件的测试。对于<code>login.spec.ts</code>这个测试文件的内容，主要还是记录下<code>jasmine.createSpyObj</code>这个方法。我用这个方法创建了一个<code>AuthService</code>的<code>spy</code>。这个<code>spy</code>是监视点击登录按钮时，触发的组件内的<code>submit</code>函数。<code>submit</code>执行时会调用<code>AuthService</code>的<code>login</code>方法。此时，我们不需要用<code>httpMock</code>方式来模拟网络请求数据了，可以直接调用<code>AuthService.login</code>(这个服务和方法现在是<code>jasmine</code>创建的<code>spy</code>)下的<code>returnValue</code>来立刻返回结果，这样我们就可以直接测试<code>authService.login.subscribe</code>回调函数内的代码。<br>那为什么可以不用<code>httpMock</code>模拟网络请求呢？这就是上面提到的各自独立加载和有测试单元了。我们已经对<code>AuthService</code>这个服务写过单元测试了，保证了他的功能正常。然后，到我们的对组件测试时，我们就没必要再重复这个模拟过程了。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> angular </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> testing </tag>
+            
+            <tag> angular testing </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[开发angular上的formControl组件]]></title>
+      <url>http://yanqing6628780.github.io/2018/05/15/angular-component-formcontrol/</url>
+      <content type="html"><![CDATA[<p>一个简单的密码显示隐藏组件，是对ant desigin of angular的nz-input组件的二次封装。</p>
+<p>文件源代码：<a href="https://github.com/BoxSystem/StoreBox-ng2/blob/master/src/app/components/password-eye/index.ts" target="_blank" rel="noopener">https://github.com/BoxSystem/StoreBox-ng2/blob/master/src/app/components/password-eye/index.ts</a></p>
+<p>看文件的提交历史。其实，一开始是没考虑formControl的支持的。不使用formControl的情况，只要使用EventEmitter触发事件进行组件间交互就好。<br>当你需要在页面组件使用FormBuilder时，你就需要在页面元素上绑定formControlName属性。<br>但是，当你需要将html元素二次封装成组件时，你的组件必须<code>implements`</code>ControlValueAccessor<code>这个接口。并且，实现接口下面的三个方法</code>writeValue<code></code>registerOnChange<code></code>registerOnTouched`。实现了这个三方法后，上面EventEmitter触发的交互事件已经不需要了。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> angular </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> angular </tag>
+            
+            <tag> formControl </tag>
+            
+            <tag> component </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[应用在openwrt固件上的angular项目]]></title>
+      <url>http://yanqing6628780.github.io/2018/01/11/angular-ubus-openwrt/</url>
+      <content type="html"><![CDATA[<p>项目地址：<a href="https://github.com/yanqing6628780/angular2_ubus_openwrt" target="_blank" rel="noopener">https://github.com/yanqing6628780/angular2_ubus_openwrt</a></p>
+<p>该项目是在公司的<code>pandorabox</code>固件的<code>ubus</code>接口下，使用<code>angular</code>进行开发尝试。<br>所以，要运行该项目：</p>
+<ul>
+<li>你需要一个路由器</li>
+<li>该路由器需要刷入<code>pandorabox</code>或者<code>openwrt</code>固件</li>
+<li>固件内需要有以下<code>ubus</code>命令：<ul>
+<li>session</li>
+<li>uci</li>
+</ul>
+</li>
+</ul>
+<p>如果你路由器不是<code>192.168.1.1</code>的ip，你还需要修改<code>proxy.conf.json</code>文件。</p>
+<p>该项目是从angular的hero项目clone下来后直接修改的。只app内的文件，其他配置基本没有修改。<br>用到的知识点如下：</p>
+<ul>
+<li>路由拆分</li>
+<li>http拦截器</li>
+<li>路由守卫(鉴权)</li>
+<li>延迟加载(这个没看出效果)</li>
+<li>使用<a href="https://ng.ant.design" target="_blank" rel="noopener">ng-zorro-antd</a></li>
+<li>组件二次封装(难点1)</li>
+</ul>
+<p>其实，按照hero项目的教程看下来，你基本能掌握大部分技能。但是，要真正学习到知识还是要用实际项目练手。就好像难点1那里，这里的封装需了解</p>
+<ul>
+<li>如何对数据进行双向绑定</li>
+<li>如何从组件输入后输出<br>现在<code>angular</code>不像<code>angular1</code>的<code>Directive</code>可以直接使用<code>scope</code>进行双向绑定<br>你还要使用各种装饰器<code>@Input</code> <code>@Output</code>还要使用<code>EventEmitter</code>进行事件触发。<br>详细请看<code>password_eye</code>目录下.ts文件</li>
+</ul>
+<p>据说，这样做的目的是为了减少像<code>angular1</code>那样的全局<code>脏检查</code>，性能会更好。但是，开发就麻烦和复杂了。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>angular开发还是要配合<code>vscode</code>进行开发，不然<code>import</code>库的时候真的好麻烦<br>还有现在引入的组件概念。其实，你把这个组件当成<code>angular1</code>的控制器，就比较容易理解。<br>但是，<code>angular1</code>的<code>Directive</code>现在也是归到<code>@Component</code>的。你在<code>angular</code>里面使用<code>@Directive</code>是没法引入<code>template</code>和<code>templateUrl</code>这些参数的。所以，<code>angular</code>的<code>@Directive</code>又是另外一个概念了<br>而且，<code>angular</code>现在也解决了<code>angular1</code>时的少问题。例如：双view。而且，<code>route</code>比以前强大，有守卫、延迟加载、还有延迟预加载。<br>不过，<code>angular</code>有个比较麻烦的‘缺点’。例如：父组件的模板上有个<code>tilte</code>变量，这个变量是用在head标签内的title标签。如果，想要子组件内赋值，你只能使用<code>service</code>这种形式，然后这个变量要用Rxjx的<code>Observable</code>。子组件要注入这个<code>service</code>，父组件对其进行<code>订阅</code>。<br>暂时，使用<code>angular</code>的感受就是这样了。如果项目能继续深入应该会有发现更多‘问题’，解决更多问题，这样对<code>angular</code>有更多和更深入的了解。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> angular </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> angular </tag>
+            
+            <tag> openwrt </tag>
+            
+            <tag> ubus </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[docker 挂载目录造成程序无法找到文件]]></title>
+      <url>http://yanqing6628780.github.io/2018/01/11/docker-mount/</url>
+      <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">db:</span><br><span class="line">    image: mongo</span><br><span class="line">    volumes:</span><br><span class="line">        - ~/www/db:/data</span><br><span class="line">    container_name: db</span><br><span class="line">    restart: always</span><br><span class="line"></span><br><span class="line">www:</span><br><span class="line">    build: .</span><br><span class="line">    ports:</span><br><span class="line">        - &quot;12333:8000&quot;</span><br><span class="line">    volumes:</span><br><span class="line">        - ~/www/logs:/www/logs</span><br><span class="line">        - ~/www/public:/www/public</span><br><span class="line">        - ~/www/config:/www/config</span><br><span class="line">    links:</span><br><span class="line">        - db</span><br><span class="line">    container_name: www_authbox</span><br><span class="line">    restart: always</span><br></pre></td></tr></table></figure>
+<p>以上是docker-compose配置。<br>有问题是这里 <code>- ~/www/config:/www/config</code><br>config目录是用来放置程序配置文件的<br>如果将config目录挂载后，<code>npm start</code>启动程序时，程序查找config目录下文件会提示找不到文件的错误。但是，文件其实已经在构建时拷贝到config目录下了。<br>这是docker挂载的bug呢？还是写法有问题呢？暂时未找到原因</p>
+<p>解决方案如下：</p>
+<ul>
+<li>不要挂载config目录</li>
+<li>根据同事建议，迟延<code>npm start</code>。如使用sleep。或者在<code>\bin\www</code>增加<code>timeout</code>代码</li>
+</ul>
+]]></content>
+      
+        <categories>
+            
+            <category> 运维 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> docker </tag>
+            
+            <tag> docker-compose </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[karma配置参数笔记(2)]]></title>
+      <url>http://yanqing6628780.github.io/2017/02/21/karma-config-note-2/</url>
+      <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(config) &#123;</span><br><span class="line">    var files = [];</span><br><span class="line">    files.push(&apos;newifi/@(jquery*|newifi).js&apos;);</span><br><span class="line">    files.push(&apos;index.html&apos;);</span><br><span class="line">    files.push(&apos;../../test/*.coffee&apos;);</span><br><span class="line">    files.push(&apos;../../test/*.js&apos;);</span><br><span class="line">    var otherFiles = [</span><br><span class="line">        &apos;newifi/**/!(jquery*|newifi|angular*|bootstrap|echarts*).js&apos;,</span><br><span class="line">        &apos;newifi/**/*.css&apos;,</span><br><span class="line">        &apos;newifi/**/*.json&apos;</span><br><span class="line">    ];</span><br><span class="line">    otherFiles.forEach((file) =&gt; &#123;</span><br><span class="line">        files.push(&#123;</span><br><span class="line">            pattern: file,</span><br><span class="line">            served: true,</span><br><span class="line">            included: false</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    var preprocessors = &#123;</span><br><span class="line">        &apos;**/*.html&apos;: [&apos;html2js&apos;],</span><br><span class="line">        &apos;../../**/*.coffee&apos;: [&apos;coffee&apos;]</span><br><span class="line">    &#125;;</span><br><span class="line">    preprocessors[otherFiles[0]] = [&apos;coverage&apos;];</span><br><span class="line">    config.set(&#123;</span><br><span class="line">        // base path that will be used to resolve all patterns (eg. files, exclude)</span><br><span class="line">        basePath: &apos;web/htdocs/&apos;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // frameworks to use</span><br><span class="line">        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter</span><br><span class="line">        frameworks: [&apos;jasmine-jquery&apos;, &apos;jasmine&apos;, &apos;jasmine-matchers&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // list of files / patterns to load in the browser</span><br><span class="line">        files: files,</span><br><span class="line"></span><br><span class="line">        // list of files to exclude</span><br><span class="line">        exclude: [],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // preprocess matching files before serving them to the browser</span><br><span class="line">        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor</span><br><span class="line">        preprocessors: preprocessors,</span><br><span class="line">        proxies: &#123;</span><br><span class="line">            &apos;/newifi&apos;: &apos;/base/newifi&apos;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        // test results reporter to use</span><br><span class="line">        // possible values: &apos;dots&apos;, &apos;progress&apos;</span><br><span class="line">        // available reporters: https://npmjs.org/browse/keyword/karma-reporter</span><br><span class="line">        reporters: [&apos;progress&apos;, &apos;kjhtml&apos;, &apos;coverage&apos;],</span><br><span class="line"></span><br><span class="line">        coverageReporter: &#123;</span><br><span class="line">            type: &apos;html&apos;,</span><br><span class="line">            dir: &apos;../../coverage/&apos;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        // web server port</span><br><span class="line">        port: 9876,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // enable / disable colors in the output (reporters and logs)</span><br><span class="line">        colors: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // level of logging</span><br><span class="line">        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG</span><br><span class="line">        logLevel: config.LOG_INFO,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // enable / disable watching file and executing tests whenever any file changes</span><br><span class="line">        autoWatch: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // start these browsers</span><br><span class="line">        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher</span><br><span class="line">        browsers: [&apos;PhantomJS&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // Continuous Integration mode</span><br><span class="line">        // if true, Karma captures browsers, runs the tests and exits</span><br><span class="line">        singleRun: false,</span><br><span class="line"></span><br><span class="line">        // Concurrency level</span><br><span class="line">        // how many browser should be started simultaneous</span><br><span class="line">        concurrency: Infinity</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>这是改进后的配置文件。<br>上一篇里面用<code>glob</code>获取所有匹配文件，然后一个个加文件的做法其实是多余的。<br>经过试验，其实<code>karma</code>的文件匹配方式是支持<code>glob</code>那套的。<br><a id="more"></a></p>
+<p>然后，新配置内添加<code>kjhtml</code>插件和<code>coverage</code>插件。<br><code>kjhtml</code>插件的作用是将<code>karma</code>服务器的debug页变成测试结果页。而且，在debug页点击其中一个测试结果，该测试都会重新执行一遍。不过，可惜的是，修改测试文件后不会自动刷新。<br><code>coverage</code>插件是覆盖测试报告。<br>上面配置文件里面的这句:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">preprocessors[otherFiles[0]] = [&apos;coverage&apos;];</span><br></pre></td></tr></table></figure></p>
+<p>表示那些被测试的文件需要代码覆盖测试报告。</p>
+]]></content>
+      
+        <categories>
+            
+            <category> 测试 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> karma </tag>
+            
+            <tag> 测试框架 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+    <entry>
+      <title><![CDATA[karma配置参数笔记]]></title>
+      <url>http://yanqing6628780.github.io/2017/02/16/karma-config-note/</url>
+      <content type="html"><![CDATA[<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line">module.exports = function(config) &#123;</span><br><span class="line">    var globSync = require(&quot;glob&quot;).sync;</span><br><span class="line">    var files = globSync(&apos;newifi/@(jquery*|newifi).js&apos;, &#123; cwd: &apos;web/htdocs&apos; &#125;);</span><br><span class="line">    var otherJsFiles = globSync(&apos;newifi/**/!(jquery*|newifi|angular*|bootstrap|echarts*).&#123;js,json&#125;&apos;, &#123; cwd: &apos;web/htdocs&apos; &#125;);</span><br><span class="line">    var cssFiles = globSync(&apos;newifi/**/*.css&apos;, &#123; cwd: &apos;web/htdocs&apos; &#125;);</span><br><span class="line">    files.push(&apos;index.html&apos;);</span><br><span class="line">    files.push(&apos;../../test/*.coffee&apos;);</span><br><span class="line">    files.push(&apos;../../test/*.js&apos;);</span><br><span class="line">    otherJsFiles.forEach(function(file)&#123;</span><br><span class="line">        files.push(&#123;</span><br><span class="line">            pattern: file,</span><br><span class="line">            served: true,</span><br><span class="line">            included: false</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    cssFiles.forEach(function(file)&#123;</span><br><span class="line">        files.push(&#123;</span><br><span class="line">            pattern: file,</span><br><span class="line">            served: true,</span><br><span class="line">            included: false</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;);</span><br><span class="line">    config.set(&#123;</span><br><span class="line">        // base path that will be used to resolve all patterns (eg. files, exclude)</span><br><span class="line">        basePath: &apos;web/htdocs/&apos;,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // frameworks to use</span><br><span class="line">        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter</span><br><span class="line">        frameworks: [&apos;jasmine-jquery&apos;, &apos;jasmine&apos;, &apos;jasmine-matchers&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // list of files / patterns to load in the browser</span><br><span class="line">        files: files,</span><br><span class="line"></span><br><span class="line">        // list of files to exclude</span><br><span class="line">        exclude: [],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // preprocess matching files before serving them to the browser</span><br><span class="line">        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor</span><br><span class="line">        preprocessors: &#123;</span><br><span class="line">            &apos;**/*.html&apos;: [&apos;html2js&apos;],</span><br><span class="line">            &apos;../../**/*.coffee&apos;: [&apos;coffee&apos;, &apos;coverage&apos;]</span><br><span class="line">        &#125;,</span><br><span class="line">        proxies: &#123;</span><br><span class="line">            &apos;/newifi&apos;: &apos;/base/newifi&apos;</span><br><span class="line">        &#125;,</span><br><span class="line"></span><br><span class="line">        // test results reporter to use</span><br><span class="line">        // possible values: &apos;dots&apos;, &apos;progress&apos;</span><br><span class="line">        // available reporters: https://npmjs.org/browse/keyword/karma-reporter</span><br><span class="line">        reporters: [&apos;progress&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // web server port</span><br><span class="line">        port: 9876,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // enable / disable colors in the output (reporters and logs)</span><br><span class="line">        colors: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // level of logging</span><br><span class="line">        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG</span><br><span class="line">        logLevel: config.LOG_INFO,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // enable / disable watching file and executing tests whenever any file changes</span><br><span class="line">        autoWatch: true,</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // start these browsers</span><br><span class="line">        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher</span><br><span class="line">        browsers: [&apos;PhantomJS&apos;],</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        // Continuous Integration mode</span><br><span class="line">        // if true, Karma captures browsers, runs the tests and exits</span><br><span class="line">        singleRun: false,</span><br><span class="line"></span><br><span class="line">        // Concurrency level</span><br><span class="line">        // how many browser should be started simultaneous</span><br><span class="line">        concurrency: Infinity</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>上面是我的配置文件<br><a id="more"></a><br>首先，说明下basePath参数。这个参数设置了<code>web/htdocs/</code>，这个作用是在<code>files</code>和<code>exclude</code>两个参数里面不用再写这部分路径的匹配了。<br>但是，我这个项目的<code>test</code>目录在<code>web/htdocs/</code>外,所以还要补上<code>../../</code>。否则会匹配不上。</p>
+<p>然后，我们再看看<code>files</code>参数下面这三个参数<code>pattern</code>、<code>served</code>和<code>included</code>这三个参数.<br><code>pattern</code>是要匹配的文件和匹配模式<br><code>served</code>用于该文件是否由karma webserver提供<br><code>included</code>浏览器是否需要通过<code>&lt;script&gt;</code>标签引入该文件  </p>
+<p>为什么我要将部分文件设置成<code>included:false</code>手动加载呢？<br>这是因为部分js文件加载是由<code>newifi.js</code>，通过ajax加载进去的。如果，直接<code>included</code>进karma webserver就会报错（找不到函数或者变量没定义）。<br>但是，这样还是不能正常加载这些js文件的。在执行<code>newifi.js</code>时，ajax加载这部分js文件会提示404.<br>这是因为karma将加载后的文件移到<code>http:\\localhost:[port]\base</code>下了。所以，你还要设置<code>proxies</code>参数.将ajax加载<code>/newifi</code>下的js文件指向<code>/base/newifi</code></p>
+]]></content>
+      
+        <categories>
+            
+            <category> 测试 </category>
+            
+        </categories>
+        
+        
+        <tags>
+            
+            <tag> karma </tag>
+            
+            <tag> 测试框架 </tag>
+            
+        </tags>
+        
+    </entry>
+    
+  
+  
+</search>
