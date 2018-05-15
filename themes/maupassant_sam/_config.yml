@@ -37,7 +37,7 @@ widgets: ## Six widgets in sidebar provided: search, category, tag, recent_posts
 
 links:
   - title: 渣渣
-    url: http://arylo.me/
+    url: http://arylo.github.io/
 
 timeline:
   - num: 1
